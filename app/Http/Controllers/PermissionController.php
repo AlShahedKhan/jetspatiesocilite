@@ -39,18 +39,33 @@ class PermissionController extends Controller
 
 
 
-    public function edit($id)
+    public function edit(Permission $permission)
     {
-
+        return view('role-permission.permission.edit',[
+            'permission' => $permission
+        ]);
     }
 
-    public function update(Request $request, $id)
+    public function update(Request $request, Permission $permission)
     {
+        $request->validate([
+            'name' => [
+                'required',
+                'string',
+                'unique:permissions,name'
+            ]
+        ]);
 
+        $permission->update([
+            'name' => $request->name
+        ]);
+
+        return redirect('permissions')->with('status','Permission Updated successfully');
     }
 
-    public function destroy($id)
+    public function destroy(Permission $permission)
     {
-
+        $permission->delete();
+        return redirect('permissions')->with('status','Permission Deleted successfully');
     }
 }

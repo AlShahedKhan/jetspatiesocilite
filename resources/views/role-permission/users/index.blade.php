@@ -1,7 +1,7 @@
 <x-app-layout>
     <x-slot name="header">
         <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
-            {{ __('Permissions') }}
+            {{ __('Users') }}
         </h2>
     </x-slot>
     <div class="py-12">
@@ -16,9 +16,9 @@
             <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-xl sm:rounded-lg p-6">
                 <!-- Right-Aligned Button -->
                 <div class="flex justify-end mb-4">
-                    <x-nav-link href="{{ route('permissions.create') }}" :active="request()->routeIs('permissions.create')"
+                    <x-nav-link href="{{ route('users.create') }}" :active="request()->routeIs('users.create')"
                         class="inline-flex items-center px-4 py-2 bg-blue-600 text-white text-sm font-medium rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition">
-                        {{ __('Add Permission') }}
+                        {{ __('Add User') }}
                     </x-nav-link>
                 </div>
 
@@ -29,22 +29,33 @@
                             <tr>
                                 <th class="py-4 px-6 text-left text-sm font-bold uppercase tracking-wider">ID</th>
                                 <th class="py-4 px-6 text-left text-sm font-bold uppercase tracking-wider">Name</th>
+                                <th class="py-4 px-6 text-left text-sm font-bold uppercase tracking-wider">Email</th>
                                 <th class="py-4 px-6 text-left text-sm font-bold uppercase tracking-wider">Actions</th>
                             </tr>
                         </thead>
                         <tbody class="divide-y divide-gray-200 dark:divide-gray-700">
-                            @foreach ($permissions as $permission)
+                            @foreach ($users as $user)
                                 <tr class="hover:bg-gray-100 dark:hover:bg-gray-700 transition">
                                     <td class="py-4 px-6 text-sm font-medium text-gray-900 dark:text-gray-200">
-                                        {{ $permission->id }}</td>
+                                        {{ $user->id }}</td>
                                     <td class="py-4 px-6 text-sm text-gray-700 dark:text-gray-300">
-                                        {{ $permission->name }}</td>
-                                    <td class="py-4 px-6 text-sm">
-                                        <x-nav-link href="{{ route('permissions.edit', $permission->id) }}">
+                                        {{ $user->name }}</td>
+                                    <td class="py-4 px-6 text-sm text-gray-700 dark:text-gray-300">
+                                        {{ $user->email }}</td>
+                                    <td class="py-4 px-6 text-sm text-gray-700 dark:text-gray-300">
+                                        @foreach ($user->getRoleNames() as $rolename)
+                                            <x-label class="bg-green-500 text-color-blue-900 ">{{ $rolename }}</x-label>
+                                        @endforeach
+                                    </td>
+
+
+
+                                    <td class="py-4 px-6 text-sm text-gray-700 dark:text-gray-300">
+                                        <x-nav-link href="{{ route('users.edit', $user->id) }}">
                                             {{ __('Edit') }}
                                         </x-nav-link>
-
-                                        <form action="{{ route('permissions.destroy', $permission->id) }}" method="POST" class="inline-block">
+                                        <form action="{{ route('users.destroy', $user->id) }}" method="POST"
+                                            class="inline-block">
                                             @csrf
                                             @method('DELETE')
                                             <button type="submit" class="p-0 m-0 border-0 bg-transparent">

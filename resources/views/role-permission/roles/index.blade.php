@@ -1,7 +1,7 @@
 <x-app-layout>
     <x-slot name="header">
         <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
-            {{ __('Permissions') }}
+            {{ __('Roles') }}
         </h2>
     </x-slot>
     <div class="py-12">
@@ -16,9 +16,9 @@
             <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-xl sm:rounded-lg p-6">
                 <!-- Right-Aligned Button -->
                 <div class="flex justify-end mb-4">
-                    <x-nav-link href="{{ route('permissions.create') }}" :active="request()->routeIs('permissions.create')"
+                    <x-nav-link href="{{ route('roles.create') }}" :active="request()->routeIs('roles.create')"
                         class="inline-flex items-center px-4 py-2 bg-blue-600 text-white text-sm font-medium rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition">
-                        {{ __('Add Permission') }}
+                        {{ __('Add Role') }}
                     </x-nav-link>
                 </div>
 
@@ -33,18 +33,24 @@
                             </tr>
                         </thead>
                         <tbody class="divide-y divide-gray-200 dark:divide-gray-700">
-                            @foreach ($permissions as $permission)
+                            @foreach ($roles as $role)
                                 <tr class="hover:bg-gray-100 dark:hover:bg-gray-700 transition">
                                     <td class="py-4 px-6 text-sm font-medium text-gray-900 dark:text-gray-200">
-                                        {{ $permission->id }}</td>
+                                        {{ $role->id }}</td>
                                     <td class="py-4 px-6 text-sm text-gray-700 dark:text-gray-300">
-                                        {{ $permission->name }}</td>
+                                        {{ $role->name }}</td>
                                     <td class="py-4 px-6 text-sm">
-                                        <x-nav-link href="{{ route('permissions.edit', $permission->id) }}">
+
+                                        <x-nav-link href="{{ route('roles.add-permissions', $role->id) }}">
+                                            {{ __('Add / Edit Role Permissions') }}
+                                        </x-nav-link>
+
+                                        <x-nav-link href="{{ route('roles.edit', $role->id) }}">
                                             {{ __('Edit') }}
                                         </x-nav-link>
 
-                                        <form action="{{ route('permissions.destroy', $permission->id) }}" method="POST" class="inline-block">
+                                        <form action="{{ route('roles.destroy', $role->id) }}" method="POST"
+                                            class="inline-block">
                                             @csrf
                                             @method('DELETE')
                                             <button type="submit" class="p-0 m-0 border-0 bg-transparent">
