@@ -14,10 +14,10 @@ class PermissionSeeder extends Seeder
     public function run(): void
     {
         $permissions = [
-            ['name' => 'store users'],
-            ['name' => 'Update users'],
-            ['name' => 'view users'],
-            ['name' => 'destroy users'],
+            ['name' => 'role_read'],
+            ['name' => 'role_create'],
+            ['name' => 'role_update'],
+            ['name' => 'role_delete'],
         ];
         foreach ($permissions as $permission) {
             Permission::create($permission);

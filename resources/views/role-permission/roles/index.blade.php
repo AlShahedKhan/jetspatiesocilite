@@ -16,10 +16,12 @@
             <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-xl sm:rounded-lg p-6">
                 <!-- Right-Aligned Button -->
                 <div class="flex justify-end mb-4">
-                    <x-nav-link href="{{ route('roles.create') }}" :active="request()->routeIs('roles.create')"
-                        class="inline-flex items-center px-4 py-2 bg-blue-600 text-white text-sm font-medium rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition">
-                        {{ __('Add Role') }}
-                    </x-nav-link>
+                    @can('role-create')
+                        <x-nav-link href="{{ route('roles.create') }}" :active="request()->routeIs('roles.create')"
+                            class="inline-flex items-center px-4 py-2 bg-blue-600 text-white text-sm font-medium rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition">
+                            {{ __('Add Role') }}
+                        </x-nav-link>
+                    @endcan
                 </div>
 
                 <!-- Main Content - Beautified Table -->

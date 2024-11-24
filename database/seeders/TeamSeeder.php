@@ -2,40 +2,42 @@
 
 namespace Database\Seeders;
 
-use App\Models\Team;
 use Illuminate\Database\Seeder;
+use App\Models\User; // Make sure to import the User model
 use Illuminate\Support\Facades\DB;
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 
 class TeamSeeder extends Seeder
 {
     /**
      * Run the database seeds.
+     *
+     * @return void
      */
-    public function run(): void
+    public function run()
     {
-        DB::table('team_user')->insert([
-            [
-                'team_id' => 1, // Replace with actual team ID
-                'user_id' => 1, // Replace with actual user ID
-                'role' => 'Owner', // Example role
-                'created_at' => now(),
-                'updated_at' => now(),
-            ],
-            [
-                'team_id' => 1, // Same team, different user
-                'user_id' => 2,
-                'role' => 'Member',
-                'created_at' => now(),
-                'updated_at' => now(),
-            ],
-            [
-                'team_id' => 2, // Different team, different user
-                'user_id' => 3,
-                'role' => 'Admin',
-                'created_at' => now(),
-                'updated_at' => now(),
-            ],
-        ]);
+        // Example: Fetch a user to assign the team to
+        $user = User::first();
+
+        if ($user) {
+            // Insert team data
+            DB::table('teams')->insert([
+                [
+                    'user_id' => $user->id,
+                    'name' => 'Team Alpha',
+                    'personal_team' => true,
+                    'created_at' => now(),
+                    'updated_at' => now(),
+                ],
+                [
+                    'user_id' => $user->id,
+                    'name' => 'Team Beta',
+                    'personal_team' => false,
+                    'created_at' => now(),
+                    'updated_at' => now(),
+                ],
+            ]);
+        } else {
+            $this->command->warn('No user found. Please create a user first.');
+        }
     }
 }

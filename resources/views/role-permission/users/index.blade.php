@@ -44,7 +44,8 @@
                                         {{ $user->email }}</td>
                                     <td class="py-4 px-6 text-sm text-gray-700 dark:text-gray-300">
                                         @foreach ($user->getRoleNames() as $rolename)
-                                            <x-label class="bg-green-500 text-color-blue-900 ">{{ $rolename }}</x-label>
+                                            <x-label
+                                                class="bg-green-500 text-color-blue-900 ">{{ $rolename }}</x-label>
                                         @endforeach
                                     </td>
 
