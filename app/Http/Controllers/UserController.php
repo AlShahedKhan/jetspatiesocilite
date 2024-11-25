@@ -27,7 +27,6 @@ class UserController extends Controller
         ]);
     }
 
-
     public function store(Request $request)
     {
         $request->validate([
@@ -38,33 +37,31 @@ class UserController extends Controller
             'roles.*' => 'exists:roles,name',
         ]);
 
+        // Check if trying to assign a super-admin role
+        if (in_array('super-admin', $request->roles)) {
+            // Ensure only a super-admin can assign the super-admin role
+            if (!auth()->user()->hasRole('super-admin')) {
+                return redirect('/users')->with('status', 'Only a Super Admin can assign the Super Admin role.');
+            }
+        }
+
+        // Create the user
         $user = User::create([
             'name' => $request->name,
             'email' => $request->email,
             'password' => Hash::make($request->password),
         ]);
 
-        // Debugging Guards
+        // Assign roles to the user
         foreach ($request->roles as $roleName) {
             $role = Role::where('name', $roleName)->where('guard_name', 'sanctum')->first();
             if ($role) {
-                Log::info("Assigning role to user:", [
-                    'role' => $role->name,
-                    'role_guard' => $role->guard_name,
-                    'user_guard' => 'sanctum', // Explicitly stating the user guard
-                ]);
-
-                // Assign role if guards match
                 $user->assignRole($role);
-            } else {
-                Log::error("Role not found or guard mismatch:", ['role_name' => $roleName]);
             }
         }
 
         return redirect('/users')->with('status', 'User created successfully with roles');
     }
-
-
 
 
     public function edit(User $user)
@@ -87,6 +84,13 @@ class UserController extends Controller
             'roles' => 'required|array',
             'roles.*' => 'exists:roles,name',
         ]);
+
+        // Check if trying to update a super-admin
+        if ($user->hasRole('super-admin')) {
+            if (!auth()->user()->hasRole('super-admin')) {
+                return redirect('/users')->with('status', 'Only a Super Admin can update another Super Admin.');
+            }
+        }
 
         $data = [
             'name' => $request->name,
@@ -111,7 +115,6 @@ class UserController extends Controller
         return redirect('/users')->with('status', 'User updated successfully with roles');
     }
 
-
     public function destroy(User $user)
     {
         // Prevent deletion of super-admins by non-super-admins
@@ -124,5 +127,4 @@ class UserController extends Controller
 
         return redirect('/users')->with('status', 'User deleted successfully');
     }
-
 }

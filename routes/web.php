@@ -41,10 +41,12 @@ Route::middleware([
         Route::get('/{role}/edit', 'edit')->name('roles.edit')->middleware('PermissionCheck:role_update');
         Route::put('/{role}', 'update')->name('roles.update')->middleware('PermissionCheck:role_update');
         Route::delete('/{role}', 'destroy')->name('roles.destroy')->middleware('PermissionCheck:role_delete');
+        Route::get('/{role}/give-permissions', 'addPermissionToRole')->name('roles.add-permissions')->middleware('PermissionCheck:add_role_permissions');
+        Route::put('/{role}/give-permissions', 'givePermissionToRole')->name('roles.give-permissions')->middleware('PermissionCheck:give_role_permissions');
     });
 
-    Route::get('/roles/{role}/give-permissions', [RoleController::class, 'addPermissionToRole'])->name('roles.add-permissions');
-    Route::put('/roles/{role}/give-permissions', [RoleController::class, 'givePermissionToRole'])->name('roles.give-permissions');
+    // Route::get('/roles/{role}/give-permissions', [RoleController::class, 'addPermissionToRole'])->name('roles.add-permissions');
+    // Route::put('/roles/{role}/give-permissions', [RoleController::class, 'givePermissionToRole'])->name('roles.give-permissions');
 
     // Route::resource('users', UserController::class);
     Route::controller(UserController::class)->prefix('users')->group(function () {

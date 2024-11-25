@@ -48,6 +48,8 @@ class RoleSeeder extends Seeder
                     'user_create',
                     'user_update',
                     'user_delete',
+                    'add_role_permissions',
+                    'give_role_permissions',
                 ];
                 $role->syncPermissions(Permission::whereIn('name', $adminPermissions)->get());
             }

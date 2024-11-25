@@ -2,11 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Spatie\Permission\Models\Role;
 use Spatie\Permission\Models\Permission;
-
 
 class RoleController extends Controller
 {
@@ -39,8 +39,6 @@ class RoleController extends Controller
 
         return redirect('roles')->with('status', 'Role created successfully');
     }
-
-
 
     public function edit(Role $role)
     {
@@ -81,8 +79,6 @@ class RoleController extends Controller
             ->pluck('role_has_permissions.permission_id', 'role_has_permissions.permission_id')
             ->all();
 
-        // dd($rolePermissions);
-
         return view('role-permission.roles.add-permission', [
             'role' => $role,
             'permission' => $permission,
@@ -94,11 +90,23 @@ class RoleController extends Controller
     {
         $request->validate([
             'permission' => [
-                'required'
-            ]
+                'required',
+                'array',
+                'exists:permissions,name',
+            ],
         ]);
+
+        // Check if the role is 'super-admin'
+        if ($role->name === 'super-admin') {
+            // Only allow super-admin to modify super-admin role permissions
+            if (!auth()->user()->hasRole('super-admin')) {
+                return redirect('/roles')->with('status', 'Only a Super Admin can manage Super Admin role permissions.');
+            }
+        }
+
+        // Assign permissions to the role
         $role->syncPermissions($request->permission);
+
         return back()->with('status', 'Permission Added to Role successfully');
-        // return redirect()->route('roles.index')->with('status', 'Permission Added to Role successfully');
     }
 }
