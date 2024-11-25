@@ -15,29 +15,29 @@ class TeamSeeder extends Seeder
      */
     public function run()
     {
-        // Example: Fetch a user to assign the team to
-        $user = User::first();
+        // Fetch all users
+        $users = User::all();
 
-        if ($user) {
-            // Insert team data
-            DB::table('teams')->insert([
-                [
-                    'user_id' => $user->id,
-                    'name' => 'Team Alpha',
-                    'personal_team' => true,
-                    'created_at' => now(),
-                    'updated_at' => now(),
-                ],
-                [
-                    'user_id' => $user->id,
-                    'name' => 'Team Beta',
-                    'personal_team' => false,
-                    'created_at' => now(),
-                    'updated_at' => now(),
-                ],
+        if ($users->isEmpty()) {
+            $this->command->warn('No users found. Please create users first.');
+            return;
+        }
+
+        // Iterate over each user and create teams
+        foreach ($users as $user) {
+            // Create a personal team for the user
+            $teamId = DB::table('teams')->insertGetId([
+                'user_id' => $user->id,
+                'name' => $user->name . "'s Personal Team",
+                'personal_team' => true,
+                'created_at' => now(),
+                'updated_at' => now(),
             ]);
-        } else {
-            $this->command->warn('No user found. Please create a user first.');
+
+            // Update the user's current_team_id
+            $user->update(['current_team_id' => $teamId]);
+
+            $this->command->info("Team created for user: {$user->name}");
         }
     }
 }

@@ -18,6 +18,14 @@ class PermissionSeeder extends Seeder
             ['name' => 'role_create'],
             ['name' => 'role_update'],
             ['name' => 'role_delete'],
+            ['name' => 'permission_read'],
+            ['name' => 'permission_create'],
+            ['name' => 'permission_update'],
+            ['name' => 'permission_delete'],
+            ['name' => 'user_read'],
+            ['name' => 'user_create'],
+            ['name' => 'user_update'],
+            ['name' => 'user_delete'],
         ];
         foreach ($permissions as $permission) {
             Permission::create($permission);

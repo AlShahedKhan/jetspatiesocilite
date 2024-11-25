@@ -114,7 +114,15 @@ class UserController extends Controller
 
     public function destroy(User $user)
     {
+        // Prevent deletion of super-admins by non-super-admins
+        if ($user->hasRole('super-admin') && !auth()->user()->hasRole('super-admin')) {
+            return redirect('/users')->with('status', 'You cannot delete a super-admin user.');
+        }
+
+        // Proceed with deletion
         $user->delete();
+
         return redirect('/users')->with('status', 'User deleted successfully');
     }
+
 }

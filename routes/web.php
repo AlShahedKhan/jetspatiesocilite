@@ -11,13 +11,26 @@ Route::get('/', function () {
     return view('welcome');
 });
 
+Route::get('/php-version', function () {
+    return 'PHP Version: ' . phpversion();
+});
+
+
 Route::middleware([
     'auth:sanctum',
     config('jetstream.auth_session'),
     'verified',
 ])->group(function () {
 
-    Route::resource('permissions', PermissionController::class);
+    // Route::resource('permissions', PermissionController::class);
+    Route::controller(PermissionController::class)->prefix('permissions')->group(function () {
+        Route::get('/', 'index')->name('permissions.index')->middleware('PermissionCheck:permission_read');
+        Route::get('/create', 'create')->name('permissions.create')->middleware('PermissionCheck:permission_create');
+        Route::post('/', 'store')->name('permissions.store')->middleware('PermissionCheck:permission_create');
+        Route::get('/{permission}/edit', 'edit')->name('permissions.edit')->middleware('PermissionCheck:permission_update');
+        Route::put('/{permission}', 'update')->name('permissions.update')->middleware('PermissionCheck:permission_update');
+        Route::delete('/{permission}', 'destroy')->name('permissions.destroy')->middleware('PermissionCheck:permission_delete');
+    });
     // Route::resource('roles', RoleController::class);
     // Route::resource('roles', RoleController::class)->middleware('PermissionCheck:role delete');
 
@@ -30,12 +43,18 @@ Route::middleware([
         Route::delete('/{role}', 'destroy')->name('roles.destroy')->middleware('PermissionCheck:role_delete');
     });
 
-
-
     Route::get('/roles/{role}/give-permissions', [RoleController::class, 'addPermissionToRole'])->name('roles.add-permissions');
     Route::put('/roles/{role}/give-permissions', [RoleController::class, 'givePermissionToRole'])->name('roles.give-permissions');
 
-    Route::resource('users', UserController::class);
+    // Route::resource('users', UserController::class);
+    Route::controller(UserController::class)->prefix('users')->group(function () {
+        Route::get('/', 'index')->name('users.index')->middleware('PermissionCheck:user_read');
+        Route::get('/create', 'create')->name('users.create')->middleware('PermissionCheck:user_create');
+        Route::post('/', 'store')->name('users.store')->middleware('PermissionCheck:user_create');
+        Route::get('/{user}/edit', 'edit')->name('users.edit')->middleware('PermissionCheck:user_update');
+        Route::put('/{user}', 'update')->name('users.update')->middleware('PermissionCheck:user_update');
+        Route::delete('/{user}', 'destroy')->name('users.destroy')->middleware('PermissionCheck:user_delete');
+    });
 
     Route::get('/dashboard', function () {
         return view('dashboard');
