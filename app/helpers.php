@@ -10,4 +10,3 @@ if (!function_exists('hasPermission')) {
         return $user ? $user->can($permission) : false;
     }
 }
-

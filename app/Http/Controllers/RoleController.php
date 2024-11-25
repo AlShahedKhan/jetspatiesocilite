@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\givePermissionToRoleRequest;
+use App\Http\Requests\RoleRequest;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -23,18 +25,10 @@ class RoleController extends Controller
         return view('role-permission.roles.create');
     }
 
-    public function store(Request $request)
+    public function store(RoleRequest $roleRequest)
     {
-        $request->validate([
-            'name' => [
-                'required',
-                'string',
-                'unique:roles,name'
-            ]
-        ]);
-
         $role = Role::create([
-            'name' => $request->name
+            'name' => $roleRequest->name
         ]);
 
         return redirect('roles')->with('status', 'Role created successfully');
@@ -47,18 +41,10 @@ class RoleController extends Controller
         ]);
     }
 
-    public function update(Request $request, Role $role)
+    public function update(RoleRequest $roleRequest, Role $role)
     {
-        $request->validate([
-            'name' => [
-                'required',
-                'string',
-                'unique:roles,name'
-            ]
-        ]);
-
         $role->update([
-            'name' => $request->name
+            'name' => $roleRequest->name
         ]);
 
         return redirect('roles')->with('status', 'Role Updated successfully');
@@ -86,16 +72,8 @@ class RoleController extends Controller
         ]);
     }
 
-    public function givePermissionToRole(Request $request, Role $role)
+    public function givePermissionToRole(givePermissionToRoleRequest $request, Role $role)
     {
-        $request->validate([
-            'permission' => [
-                'required',
-                'array',
-                'exists:permissions,name',
-            ],
-        ]);
-
         // Check if the role is 'super-admin'
         if ($role->name === 'super-admin') {
             // Only allow super-admin to modify super-admin role permissions
@@ -103,7 +81,6 @@ class RoleController extends Controller
                 return redirect('/roles')->with('status', 'Only a Super Admin can manage Super Admin role permissions.');
             }
         }
-
         // Assign permissions to the role
         $role->syncPermissions($request->permission);
 
