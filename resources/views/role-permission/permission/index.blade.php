@@ -24,7 +24,41 @@
 
                 <!-- Main Content - Beautified Table -->
                 <div class="mt-6 overflow-x-auto">
-                    <table class="min-w-full bg-white dark:bg-gray-800 rounded-lg overflow-hidden">
+
+
+                    <x-table>
+                        <x-thead>
+                            <x-tr>
+                                <x-th>ID</x-th>
+                                <x-th>Name</x-th>
+                                <x-th>Actions</x-th>
+                            </x-tr>
+                        </x-thead>
+                        <x-tbody class="divide-y divide-gray-200 dark:divide-gray-700">
+                            @foreach ($permissions as $permission)
+                                <x-tr class="hover:bg-gray-100 dark:hover:bg-gray-700 transition">
+                                    <x-td class="py-4 px-6 text-sm font-medium text-gray-900 dark:text-gray-200">
+                                        {{ $permission->id }}</x-td>
+                                    <x-td class="py-4 px-6 text-sm text-gray-700 dark:text-gray-300">
+                                        {{ $permission->name }}</x-td>
+                                    <x-td class="py-4 px-6 text-sm">
+                                        <x-nav-link href="{{ route('permissions.edit', $permission->id) }}">
+                                            {{ __('Edit') }}
+                                        </x-nav-link>
+
+                                        <form action="{{ route('permissions.destroy', $permission->id) }}" method="POST" class="inline-block">
+                                            @csrf
+                                            @method('DELETE')
+                                            <button type="submit" class="p-0 m-0 border-0 bg-transparent">
+                                                <x-nav-link>{{ __('Delete') }}</x-nav-link>
+                                            </button>
+                                        </form>
+                                    </x-td>
+                                </x-tr>
+                            @endforeach
+                        </x-tbody>
+                    </x-table>
+                    {{-- <table class="w-full bg-white dark:bg-gray-800 rounded-lg overflow-hidden">
                         <thead class="bg-blue-600 text-white">
                             <tr>
                                 <th class="py-4 px-6 text-left text-sm font-bold uppercase tracking-wider">ID</th>
@@ -55,7 +89,7 @@
                                 </tr>
                             @endforeach
                         </tbody>
-                    </table>
+                    </table> --}}
                 </div>
             </div>
         </div>
