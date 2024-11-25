@@ -30,5 +30,6 @@ class PermissionSeeder extends Seeder
         foreach ($permissions as $permission) {
             Permission::create($permission);
         }
+        $this->command->info('Permissions seeded successfully.');
     }
 }
