@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\UserRequest;
+use App\Http\Requests\UserStoreRequest;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Spatie\Permission\Models\Role;
@@ -27,16 +29,8 @@ class UserController extends Controller
         ]);
     }
 
-    public function store(Request $request)
+    public function store(UserStoreRequest $request)
     {
-        $request->validate([
-            'name' => 'required|string|max:255',
-            'email' => 'required|email|unique:users',
-            'password' => 'required|string|min:8|max:255',
-            'roles' => 'required|array',
-            'roles.*' => 'exists:roles,name',
-        ]);
-
         // Check if trying to assign a super-admin role
         if (in_array('super-admin', $request->roles)) {
             // Ensure only a super-admin can assign the super-admin role
