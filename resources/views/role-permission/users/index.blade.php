@@ -23,35 +23,34 @@
                 </div>
 
                 <!-- Main Content - Beautified Table -->
-                <div class="mt-6 overflow-x-auto">
-                    <table class="min-w-full bg-white dark:bg-gray-800 rounded-lg overflow-hidden">
-                        <thead class="bg-blue-600 text-white">
-                            <tr>
-                                <th class="py-4 px-6 text-left text-sm font-bold uppercase tracking-wider">ID</th>
-                                <th class="py-4 px-6 text-left text-sm font-bold uppercase tracking-wider">Name</th>
-                                <th class="py-4 px-6 text-left text-sm font-bold uppercase tracking-wider">Email</th>
-                                <th class="py-4 px-6 text-left text-sm font-bold uppercase tracking-wider">Actions</th>
-                            </tr>
-                        </thead>
-                        <tbody class="divide-y divide-gray-200 dark:divide-gray-700">
+                {{-- <div class="mt-6 overflow-x-auto"> --}}
+                    <x-table>
+                        <x-thead>
+                            <x-tr>
+                                <x-th>ID</x-th>
+                                <x-th>Name</x-th>
+                                <x-th>Email</x-th>
+                                <x-th>Actions</x-th>
+                            </x-tr>
+                        </x-thead>
+                        <x-tbody>
                             @foreach ($users as $user)
-                                <tr class="hover:bg-gray-100 dark:hover:bg-gray-700 transition">
-                                    <td class="py-4 px-6 text-sm font-medium text-gray-900 dark:text-gray-200">
-                                        {{ $user->id }}</td>
-                                    <td class="py-4 px-6 text-sm text-gray-700 dark:text-gray-300">
-                                        {{ $user->name }}</td>
-                                    <td class="py-4 px-6 text-sm text-gray-700 dark:text-gray-300">
-                                        {{ $user->email }}</td>
-                                    <td class="py-4 px-6 text-sm text-gray-700 dark:text-gray-300">
+                                <x-tr>
+                                    <x-td>
+                                        {{ $user->id }}</x-td>
+                                    <x-td>
+                                        {{ $user->name }}</x-td>
+                                    <x-td>
+                                        {{ $user->email }}</x-td>
+                                    <x-td>
                                         @foreach ($user->getRoleNames() as $rolename)
-                                            <x-label
-                                                class="bg-green-500 text-color-blue-900 ">{{ $rolename }}</x-label>
+                                            <x-label>{{ $rolename }}</x-label>
                                         @endforeach
-                                    </td>
+                                    </x-td>
 
 
 
-                                    <td class="py-4 px-6 text-sm text-gray-700 dark:text-gray-300">
+                                    <x-td class="py-4 px-6 text-sm text-gray-700 dark:text-gray-300">
                                         <x-nav-link href="{{ route('users.edit', $user->id) }}">
                                             {{ __('Edit') }}
                                         </x-nav-link>
@@ -63,12 +62,12 @@
                                                 <x-nav-link>{{ __('Delete') }}</x-nav-link>
                                             </button>
                                         </form>
-                                    </td>
-                                </tr>
+                                    </x-td>
+                                </x-tr>
                             @endforeach
-                        </tbody>
-                    </table>
-                </div>
+                        </x-tbody>
+                    </x-table>
+                {{-- </div> --}}
             </div>
         </div>
     </div>

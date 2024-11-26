@@ -26,22 +26,22 @@
 
                 <!-- Main Content - Beautified Table -->
                 <div class="mt-6 overflow-x-auto">
-                    <table class="min-w-full bg-white dark:bg-gray-800 rounded-lg overflow-hidden">
-                        <thead class="bg-blue-600 text-white">
-                            <tr>
-                                <th class="py-4 px-6 text-left text-sm font-bold uppercase tracking-wider">ID</th>
-                                <th class="py-4 px-6 text-left text-sm font-bold uppercase tracking-wider">Name</th>
-                                <th class="py-4 px-6 text-left text-sm font-bold uppercase tracking-wider">Actions</th>
-                            </tr>
-                        </thead>
-                        <tbody class="divide-y divide-gray-200 dark:divide-gray-700">
+                    <x-table>
+                        <x-thead >
+                            <x-tr>
+                                <x-th>ID</x-th>
+                                <x-th>Name</x-th>
+                                <x-th>Actions</x-th>
+                            </x-tr>
+                        </x-thead>
+                        <x-tbody>
                             @foreach ($roles as $role)
-                                <tr class="hover:bg-gray-100 dark:hover:bg-gray-700 transition">
-                                    <td class="py-4 px-6 text-sm font-medium text-gray-900 dark:text-gray-200">
-                                        {{ $role->id }}</td>
-                                    <td class="py-4 px-6 text-sm text-gray-700 dark:text-gray-300">
-                                        {{ $role->name }}</td>
-                                    <td class="py-4 px-6 text-sm">
+                                <x-tr>
+                                    <x-td>
+                                        {{ $role->id }}</x-td>
+                                    <x-td>
+                                        {{ $role->name }}</x-td>
+                                    <x-td>
 
                                         <x-nav-link href="{{ route('roles.add-permissions', $role->id) }}">
                                             {{ __('Add / Edit Role Permissions') }}
@@ -59,11 +59,11 @@
                                                 <x-nav-link>{{ __('Delete') }}</x-nav-link>
                                             </button>
                                         </form>
-                                    </td>
-                                </tr>
+                                    </x-td>
+                                </x-tr>
                             @endforeach
-                        </tbody>
-                    </table>
+                        </x-tbody>
+                    </x-table>
                 </div>
             </div>
         </div>

@@ -1,15 +1,21 @@
 <?php
 
-use App\Http\Controllers\PermissionController;
+use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\UserController;
-use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\PermissionController;
+use App\Http\Controllers\Auth\SocialAuthController;
 
 
 
 Route::get('/', function () {
     return view('welcome');
 });
+Route::group(['middleware' => ['web']], function () {
+    Route::get('/auth/{provider}/redirect', [SocialAuthController::class, 'redirect'])->name('auth.redirect');
+    Route::get('/auth/{provider}/callback', [SocialAuthController::class, 'callback'])->name('auth.callback');
+});
+
 
 Route::get('/php-version', function () {
     return 'PHP Version: ' . phpversion();

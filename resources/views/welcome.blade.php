@@ -56,6 +56,8 @@
                                 @endauth
                             </nav>
                         @endif
+                        <a href="{{ route('auth.redirect', ['provider' => 'github']) }}">Login with GitHub</a>
+                    <a href="{{ route('auth.redirect', ['provider' => 'google']) }}">Login with Google</a>
                     </header>
 
                     <main class="mt-6">
