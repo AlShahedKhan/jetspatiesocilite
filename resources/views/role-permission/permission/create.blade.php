@@ -25,9 +25,11 @@
                             <x-input id="name" class="block mt-1 w-full" type="text" name="name"
                                 :value="old('name')" required autofocus autocomplete="name" />
                         </div>
-                        <x-button class="mt-4 ">
-                            {{ __('Save') }}
-                        </x-button>
+                        @can('permission_create')
+                            <x-button class="mt-4 ">
+                                {{ __('Save') }}
+                            </x-button>
+                        @endcan
                     </form>
                 </div>
             </div>

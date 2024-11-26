@@ -26,11 +26,12 @@
                             <x-input id="name" class="block mt-1 w-full" type="text" name="name"
                                 value="{{ old('name', $permission->name) }}" required autofocus autocomplete="name" />
                         </div>
-                        <x-button class="mt-4">
-                            {{ __('Update') }}
-                        </x-button>
+                        @can('permission_update')
+                            <x-button class="mt-4">
+                                {{ __('Update') }}
+                            </x-button>
+                        @endcan
                     </form>
-
                 </div>
             </div>
         </div>

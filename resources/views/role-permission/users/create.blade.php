@@ -37,17 +37,20 @@
                         </div>
                         <div>
                             <x-label for="role" value="{{ __('Role') }}" />
-                            <select name="roles[]" id="role" multiple class="block mt-1 w-full border-gray-300 bg-white focus:border-blue-500 focus:ring focus:ring-blue-200 focus:ring-opacity-50 rounded-md shadow-sm text-gray-700">
+                            <select name="roles[]" id="role" multiple
+                                class="block mt-1 w-full border-gray-300 bg-white focus:border-blue-500 focus:ring focus:ring-blue-200 focus:ring-opacity-50 rounded-md shadow-sm text-gray-700">
                                 <option value="" disabled>{{ __('Select Role') }}</option>
                                 @foreach ($roles as $role)
-                                    <option value="{{ $role->name }}">{{ $role->name }}</option> <!-- Use role name -->
+                                    <option value="{{ $role->name }}">{{ $role->name }}</option>
+                                    <!-- Use role name -->
                                 @endforeach
                             </select>
-
                         </div>
-                        <x-button class="mt-4">
-                            {{ __('Save') }}
-                        </x-button>
+                        @can('user_create')
+                            <x-button class="mt-4">
+                                {{ __('Save') }}
+                            </x-button>
+                        @endcan
                     </form>
                 </div>
             </div>

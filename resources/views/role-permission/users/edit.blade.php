@@ -59,9 +59,11 @@
                                 <span class="text-red-600">{{ $message }}</span>
                             @enderror
                         </div>
-                        <x-button class="mt-4">
-                            {{ __('Update') }}
-                        </x-button>
+                        @can('user_update')
+                            <x-button class="mt-4">
+                                {{ __('Update') }}
+                            </x-button>
+                        @endcan
                     </form>
                 </div>
             </div>

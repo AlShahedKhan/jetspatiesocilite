@@ -26,9 +26,11 @@
                             <x-input id="name" class="block mt-1 w-full" type="text" name="name"
                                 value="{{ old('name', $role->name) }}" required autofocus autocomplete="name" />
                         </div>
-                        <x-button class="mt-4">
-                            {{ __('Update') }}
-                        </x-button>
+                        @can('role_update')
+                            <x-button class="mt-4">
+                                {{ __('Update') }}
+                            </x-button>
+                        @endcan
                     </form>
 
                 </div>
