@@ -27,11 +27,13 @@
                 <!-- Main Content - Beautified Table -->
                 <div class="mt-6 overflow-x-auto">
                     <x-table>
-                        <x-thead >
+                        <x-thead>
                             <x-tr>
                                 <x-th>ID</x-th>
                                 <x-th>Name</x-th>
-                                <x-th>Actions</x-th>
+                                @if (Gate::check('add_role_permissions') || Gate::check('give_role_permissions'))
+                                    <x-th>Actions</x-th>
+                                @endif
                             </x-tr>
                         </x-thead>
                         <x-tbody>
@@ -42,23 +44,26 @@
                                     <x-td>
                                         {{ $role->name }}</x-td>
                                     <x-td>
-
-                                        <x-nav-link href="{{ route('roles.add-permissions', $role->id) }}">
-                                            {{ __('Add / Edit Role Permissions') }}
-                                        </x-nav-link>
-
-                                        <x-nav-link href="{{ route('roles.edit', $role->id) }}">
-                                            {{ __('Edit') }}
-                                        </x-nav-link>
-
-                                        <form action="{{ route('roles.destroy', $role->id) }}" method="POST"
-                                            class="inline-block">
-                                            @csrf
-                                            @method('DELETE')
-                                            <button type="submit" class="p-0 m-0 border-0 bg-transparent">
-                                                <x-nav-link>{{ __('Delete') }}</x-nav-link>
-                                            </button>
-                                        </form>
+                                        @can('add_role_permissions||give_role_permissions')
+                                            <x-nav-link href="{{ route('roles.add-permissions', $role->id) }}">
+                                                {{ __('Add / Edit Role Permissions') }}
+                                            </x-nav-link>
+                                        @endcan
+                                        @can('role_update')
+                                            <x-nav-link href="{{ route('roles.edit', $role->id) }}">
+                                                {{ __('Edit') }}
+                                            </x-nav-link>
+                                        @endcan
+                                        @can('role_delete')
+                                            <form action="{{ route('roles.destroy', $role->id) }}" method="POST"
+                                                class="inline-block">
+                                                @csrf
+                                                @method('DELETE')
+                                                <button type="submit" class="p-0 m-0 border-0 bg-transparent">
+                                                    <x-nav-link>{{ __('Delete') }}</x-nav-link>
+                                                </button>
+                                            </form>
+                                        @endcan
                                     </x-td>
                                 </x-tr>
                             @endforeach

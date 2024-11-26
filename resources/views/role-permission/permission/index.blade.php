@@ -16,10 +16,12 @@
             <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-xl sm:rounded-lg p-6">
                 <!-- Right-Aligned Button -->
                 <div class="flex justify-end mb-4">
-                    <x-nav-link href="{{ route('permissions.create') }}" :active="request()->routeIs('permissions.create')"
-                        class="inline-flex items-center px-4 py-2 bg-blue-600 text-white text-sm font-medium rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition">
-                        {{ __('Add Permission') }}
-                    </x-nav-link>
+                    @can('permission_create')
+                        <x-nav-link href="{{ route('permissions.create') }}" :active="request()->routeIs('permissions.create')"
+                            class="inline-flex items-center px-4 py-2 bg-blue-600 text-white text-sm font-medium rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition">
+                            {{ __('Add Permission') }}
+                        </x-nav-link>
+                    @endcan
                 </div>
 
                 <!-- Main Content - Beautified Table -->
@@ -31,7 +33,10 @@
                             <x-tr>
                                 <x-th>ID</x-th>
                                 <x-th>Name</x-th>
-                                <x-th>Actions</x-th>
+                                @if (Gate::check('permission_update') || Gate::check('permission_delete'))
+                                    <x-th>Actions</x-th>
+                                @endif
+
                             </x-tr>
                         </x-thead>
                         <x-tbody class="divide-y divide-gray-200 dark:divide-gray-700">
@@ -42,17 +47,22 @@
                                     <x-td class="py-4 px-6 text-sm text-gray-700 dark:text-gray-300">
                                         {{ $permission->name }}</x-td>
                                     <x-td class="py-4 px-6 text-sm">
-                                        <x-nav-link href="{{ route('permissions.edit', $permission->id) }}">
-                                            {{ __('Edit') }}
-                                        </x-nav-link>
+                                        @can('permission_update')
+                                            <x-nav-link href="{{ route('permissions.edit', $permission->id) }}">
+                                                {{ __('Edit') }}
+                                            </x-nav-link>
+                                        @endcan
+                                        @can('permission_delete')
+                                            <form action="{{ route('permissions.destroy', $permission->id) }}"
+                                                method="POST" class="inline-block">
+                                                @csrf
+                                                @method('DELETE')
+                                                <button type="submit" class="p-0 m-0 border-0 bg-transparent">
+                                                    <x-nav-link>{{ __('Delete') }}</x-nav-link>
+                                                </button>
+                                            </form>
+                                        @endcan
 
-                                        <form action="{{ route('permissions.destroy', $permission->id) }}" method="POST" class="inline-block">
-                                            @csrf
-                                            @method('DELETE')
-                                            <button type="submit" class="p-0 m-0 border-0 bg-transparent">
-                                                <x-nav-link>{{ __('Delete') }}</x-nav-link>
-                                            </button>
-                                        </form>
                                     </x-td>
                                 </x-tr>
                             @endforeach
