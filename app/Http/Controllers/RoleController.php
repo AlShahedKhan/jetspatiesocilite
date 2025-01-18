@@ -7,7 +7,7 @@ use App\Interfaces\CRUDinterface;
 use App\Traits\RoleTrait;
 use Spatie\Permission\Models\Role;
 
-class RoleController extends Controller 
+class RoleController extends Controller
 {
     use RoleTrait;
     public function index()

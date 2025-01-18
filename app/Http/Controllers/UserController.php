@@ -91,6 +91,7 @@ class UserController extends Controller
             'email' => $request->email,
         ];
 
+        // If password is provided, hash and update it
         if (!empty($request->password)) {
             $data['password'] = Hash::make($request->password);
         }
@@ -98,8 +99,19 @@ class UserController extends Controller
         // Update user
         $user->update($data);
 
-        // Sync roles with the sanctum guard
-        $roles = Role::whereIn('name', $request->roles)
+        // Get the roles from the request
+        $roles = $request->roles;
+
+        // Check if user is trying to assign a super-admin or admin role
+        if (in_array('super-admin', $roles) || in_array('admin', $roles)) {
+            // Ensure that the logged-in user has the super-admin role before assigning
+            if (!auth()->user()->hasRole('super-admin')) {
+                return redirect('/users')->with('status', 'Only a Super Admin can assign Super Admin or Admin roles.');
+            }
+        }
+
+        // Sync the roles with the Sanctum guard
+        $roles = Role::whereIn('name', $roles)
             ->where('guard_name', 'sanctum')
             ->pluck('name')
             ->toArray();
@@ -108,6 +120,7 @@ class UserController extends Controller
 
         return redirect('/users')->with('status', 'User updated successfully with roles');
     }
+
 
     public function destroy(User $user)
     {

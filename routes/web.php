@@ -5,8 +5,8 @@ use App\Http\Controllers\RoleController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\PermissionController;
 use App\Http\Controllers\Auth\SocialAuthController;
-
-
+use App\Http\Controllers\DashboardController;
+use Laravel\Jetstream\Rules\Role;
 
 Route::get('/', function () {
     return view('welcome');
@@ -64,7 +64,8 @@ Route::middleware([
         Route::delete('/{user}', 'destroy')->name('users.destroy')->middleware('PermissionCheck:user_delete');
     });
 
-    Route::get('/dashboard', function () {
-        return view('dashboard');
-    })->name('dashboard');
+    // Route::get('/dashboard', function () {
+    //     return view('dashboard');
+    // })->name('dashboard');
+    Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
 });
